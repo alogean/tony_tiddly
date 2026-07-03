@@ -1,0 +1,24 @@
+\widget $graph.view($tiddler:"$:/graph/Default", $mode)
+\whitespace trim
+<$parameters
+	$params=viewParams
+	$parseMode=$defaultMode
+	$$template={{{ [<$tiddler>get[template]] ~[[$:/tags/flibbles/graph/Template]tagging[]first[]] }}}
+	$$engine={{{ [<$tiddler>get[engine]] ~[<graphengine>] }}} >
+
+<$vars
+	currentTiddler=<<$tiddler>>
+	graphengine=<<$engine>> >
+
+<$genesis
+	$type="$transclude"
+	$$tiddler=<<$template>>
+	$$fillignore=yes
+	$$mode={{{ [<$mode>!is[blank]else<$defaultMode>] }}}
+	$names="[<viewParams>jsonindexes[]!prefix[$]]"
+	$values="[<viewParams>jsonindexes[]!prefix[$]] :map[<viewParams>jsonget{!!title}]" />
+
+</$vars></$parameters>
+\end
+
+\relink $graph.view $tiddler

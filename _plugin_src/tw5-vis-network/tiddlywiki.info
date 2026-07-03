@@ -1,0 +1,29 @@
+{
+	"description": "Testing framework for vis-network",
+	"plugins": [
+		"tiddlywiki/jasmine"
+	],
+	"themes": [
+		"tiddlywiki/vanilla",
+		"tiddlywiki/snowwhite"
+	],
+	"build": {
+		"bundle": [
+			"--render",
+				"$:/plugins/flibbles/vis-network",
+				"__plugins_flibbles_vis-network.json",
+				"text/plain",
+				"$:/core/templates/html-json-tiddler"
+		],
+		"test": [
+			"--rendertiddler",
+				"$:/core/save/all",
+				"test.html",
+				"text/plain",
+				"",
+				"publishFilter",
+				"-$:/DefaultTiddlers",
+			"--test"
+		]
+	}
+}

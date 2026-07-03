@@ -1,0 +1,34 @@
+caption: Live graph
+title: $:/plugins/flibbles/graph/templates/live-graph
+tags: $:/tags/flibbles/graph/Template
+
+\whitespace trim
+
+<!-- By having this unused "focusTiddler" value update when the nodes change,
+     we can enforce a refresh of the live-graph, rather than having it try
+     to update, which might result in a worse presentation for some engines. -->
+
+<$set name="focusTiddler" filter="[subfilter{!!filter}]">
+
+<$graph>
+
+<$properties $for=nodes actions="<$action-navigate $to=<<nodeTiddler>> />" >
+
+<$properties.settings>
+
+<$properties physics=no>
+
+<$slot $name=ts-raw $depth=5 />
+
+<$list filter={{!!filter}} >
+
+<$node.default />
+
+<$edges.typed />
+
+</$list>
+</$properties>
+</$properties.settings>
+</$properties>
+</$graph>
+</$set>

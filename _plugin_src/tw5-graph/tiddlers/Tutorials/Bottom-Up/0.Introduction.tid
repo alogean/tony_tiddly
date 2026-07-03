@@ -1,0 +1,5 @@
+While many people are happy using <<.graph>>'s [[GUI]] to create common graphs, using all of its built-in templates and widgets, but maybe you'd like to create your //own// templates and widgets, because you have a specific kind of graph in mind, with specific style and behavior.
+
+For that, you can use the [[API]]. <<.graph>> defines a whole set of widgets which can act as building blocks to make exactly the kind of graph you have in mind, from exact style, to custom behavior.
+
+This tutorial will cover the core concepts important to know when using the widgets. We'll start with a simple Hello World and build up from there with larger and larger building blocks.

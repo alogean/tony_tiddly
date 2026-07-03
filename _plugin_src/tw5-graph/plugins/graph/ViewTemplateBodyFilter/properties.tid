@@ -1,0 +1,5 @@
+title: $:/plugins/flibbles/graph/ViewTemplateBodyFilter/properties
+list-before: $:/config/ViewTemplateBodyFilters/code-body
+tags: $:/tags/ViewTemplateBodyFilter
+
+[removeprefix[$:/config/flibbles/graph/]search:title[/]then[$:/plugins/flibbles/graph/ui/ViewTemplate/graph-object]]

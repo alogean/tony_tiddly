@@ -1,0 +1,48 @@
+title: Properties.StackWidget
+tags: Widgets [[Macro Widgets]]
+caption: properties.stack
+
+! Introduction
+
+The <<.wid properties.stack>> widget applies all the [[node stack properties|Stack NodeType]] to any contained nodes. It is careful to apply them in the proper order, and to the proper nodes.
+
+In theory, this widget could apply stacks of properties to edges too, but that sophisticated yet.
+
+The node property stack can be configured in the <<.tab properties>> tab from the <$link to="$:/plugins/flibbles/graph"><<.graph>> configuration</$link>.
+
+! Contents and Attributes
+
+Any nodes defined within <<.wid properties.stack>> will inherit all properties relevant to them. Any graph containing this widget will also gain any such grpah properties.
+
+|!Attribute | !Description |
+|//(none)// |>|
+
+<$doc.implementation />
+
+! Examples
+
+<$doc.example
+	description="node property stack"
+	narrative="""This demo site has several node properties configured in its settings. Here, all we have to do is wrap the nodes in <<.wid properties.stack>>, and those settings will apply to the correct nodes."""
+	content="""<$graph>
+  <$properties.stack>
+    <$list filter="[!is[system]]">
+      <$node label={{!!title}} />
+    </$list>
+  </$properties.stack>
+</$graph>""">
+<$data title="Charles Darwin" tags="Scientist Male Biologist" />
+<$data title="Barbara McClintock" tags="Scientist Female Biologist" />
+<$data title="Marie Curie" tags="Scientist Female Physicist" />
+<$data title="Isaac Newton" tags="Scientist Male Physicist" />
+<$data title="$:/config/flibbles/graph/nodes/stack/default" caption="Stack properties: default" filter="[tag[Scientist]]" type="application/json" text="""{
+    "shape": "triangle",
+    "color": "green"
+}""" />
+<$data title="$:/config/flibbles/graph/nodes/stack/female" caption="Stack properties: female" filter="[tag[Female]]" type="application/json" text="""{
+    "shape": "triangleDown"
+}""" />
+<$data title="$:/config/flibbles/graph/nodes/stack/physicist" caption="Stack properties: physicist" filter="[tag[Physicist]]" type="application/json" text="""{
+    "color": "red"
+}""" />
+</$doc.example>

@@ -1,0 +1,33 @@
+title: Cache Filter Run Prefix (Examples)
+
+This prefix is especially effective for gathering shadow tiddlers with certain prefixes. Caching a set of them in a function will allow that function to execute very quickly on all subsequent runs. In this example, all shadows and tiddlers are only trawled once.
+
+<$doc.demo
+	description=prefixes
+	code="""\function shortcuts() :cache[all[shadows+tiddlers]prefix[$:/config/shortcuts]]
+
+!!! Shortcuts using ctrl key
+<<list-links "[function[shortcuts]search[ctrl-]]">>
+
+!!! Shortcuts using alt key
+<<list-links "[function[shortcuts]search[alt-]]">>""" />
+
+We solve fibonacci numbers the famous inefficient way that takes an exponential amount of time, but caching makes it efficient anyway. We pass each number to the filter as currentTiddler, and it caches the results under that number.
+
+<$doc.demo
+	description="cached fibonacci"
+	code="""\procedure fibonacci-cache() [all[]] :cache[subfilter<fibonacci-split>] +[sum[]]
+\procedure fibonacci-split() [{!!title}compare::lt[2]] ~[enlist[-1 -2]add{!!title}subfilter<fibonacci-cache>]
+\function fibonacci(number) [<number>] :map[subfilter<fibonacci-split>]
+; 60
+: <<fibonacci 60>>""" />
+
+> Now let's see what happens when we run the same code, but swapping out the <<.value :cache>> with <<.value :map>>. It takes a long time figuring out a much smaller number. (Might be very slow depending on your machine.)
+>
+> <$doc.demo
+	description="raw fibonacci"
+	code="""\procedure fibonacci-map() [all[]] :map[subfilter<fibonacci-split>] +[sum[]]
+\procedure fibonacci-split() [{!!title}compare::lt[2]] ~[enlist[-1 -2]add{!!title}subfilter<fibonacci-map>]
+\function fibonacci(number) [<number>] :map[subfilter<fibonacci-split>]
+; 25
+: <<fibonacci 25>>""" />

@@ -1,0 +1,15 @@
+title: $:/plugins/flibbles/graph/ui/Modals/SelectTiddler
+subtitle: Select tiddler
+first-search-filter: [!is[system]!is[draft]search:title{$:/temp/graph/select}sort[title]limit[10]]
+footer: {{$:/plugins/flibbles/graph/ui/Modals/Select!!footer}}
+mask-closable: yes
+
+<p class="tc-edit-field-add">
+
+<em class="tc-edit tc-small-gap-right">
+
+<$text text="Select an existing tiddler, or type in the name for a new one."/>
+
+</em></p>
+
+<$transclude $tiddler="$:/plugins/flibbles/graph/ui/Modals/Select" />

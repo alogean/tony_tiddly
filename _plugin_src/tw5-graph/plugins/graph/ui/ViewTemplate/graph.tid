@@ -1,0 +1,11 @@
+title: $:/plugins/flibbles/graph/ui/ViewTemplate/graph
+
+\whitespace trim
+
+<$let graphengine={{{ [{!!engine}!is[blank]] ~[<graphengine>] }}}>
+
+<$transclude tiddler={{{ [{!!template}!is[blank]] ~[[$:/tags/flibbles/graph/Template]tagging[]] }}} >
+
+<$transclude tiddler="$:/language/MissingTiddler/Hint"/>
+
+</$transclude></$let>

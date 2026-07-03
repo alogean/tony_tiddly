@@ -1,0 +1,5 @@
+<<.graph>> comes with a few templates which create fleshed-out graphs out of graphTiddlers with some useful functionality.
+
+For information on how templates work and how to use them, see [[Graph Templates]].
+
+<<list-links "[tag[Templates]]">>

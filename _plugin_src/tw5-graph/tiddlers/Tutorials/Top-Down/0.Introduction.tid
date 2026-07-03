@@ -1,0 +1,34 @@
+\procedure actions()
+<$action-deletetiddler $tiddler="$:/graph/Default"/>
+<$action-setfield $tiddler="$:/state/tab/sidebar--595412856" text="$:/plugins/flibbles/graph/ui/SideBar"/>
+<$action-setfield $tiddler="$:/config/flibbles/graph/sidebar" text="$:/graph/Default" />
+\end
+
+<%if [{$:/config/flibbles/graph/engine}!match[Vis-Network]] %>
+
+<$doc.inhouse>
+
+This tutorial is intended to be run with [[Vis-Network]] active, as it's the most feature-rich and polished of the available engine adapters. Currently, you have this demo page set to <<graphengine>>.
+
+<$button class=doc-button actions="<$action-setfield $tiddler='$:/config/flibbles/graph/engine' text=Vis-Network />">
+
+Set demo to<br>{{$:/plugins/flibbles/vis-network/icon}}<br>Vis-Network
+</$button></$doc.inhouse><%endif%>
+
+
+
+So you've just installed <<.graph>> into your project. Great! But you're not sure what you're looking at. I bet you've got some of your tiddlers on that graph, and maybe show the relationship between those tiddlers, like their tags, and links, list fields.
+
+Let's do that!
+
+<$doc.inhouse>
+
+<$doc.note>If you don't want to bother yet installing <<.graph>>, you can follow along with this tutorial right here in this demo. Just click the following button, and the demo will present you exactly what a fresh install would.</$doc.note>
+
+<$button class=doc-button actions=<<actions>> >
+
+Act like a fresh install
+</$button>
+
+Also, so you know: whenever you see text in colored blocks like this, that information is specific for if you're following along in this demo site.
+</$doc.inhouse>

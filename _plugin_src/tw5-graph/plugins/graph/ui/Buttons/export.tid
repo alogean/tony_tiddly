@@ -1,0 +1,65 @@
+description: Export graph
+caption: {{$:/core/images/export-button}} export graph
+
+\whitespace trim
+
+<%if [subfilter{$:/plugins/flibbles/graph/subfilters##messages}jsonindexes[]prefix[graph-export-]] %>
+  <$vars state=<<qualify "$:/state/flibbles/graph/popup/export">>
+    imageStore="$:/temp/flibbles/graph/export">
+    <$button
+        popup=<<state>>
+        tooltip="Export graph as image"
+        class=graph-export-button>
+      <%if [<tv-config-toolbar-icons>match[yes]] %>
+        {{$:/core/images/export-button}}
+      <%endif%>
+      <%if [<tv-config-toolbar-text>match[yes]] %>
+        <span class="tc-btn-text">
+          <$text text="export graph" />
+        </span>
+      <%endif%>
+    </$button>
+    <$reveal state=<<state>> type="popup" position="below" animate="yes">
+      <div class="tc-drop-down graph-export-button-dropdown">
+        <$list variable=type filter="[subfilter{$:/plugins/flibbles/graph/subfilters##messages}jsonindexes[]removeprefix[graph-export-]]">
+          <$button class=`tc-btn-invisible graph-export-type-$(type)$`>
+            <$action-sendmessage $message=`graph-export-$(type)$`
+              targetTiddler=<<imageStore>> />
+            <!-- We wrap our downloading inside action-createtiddler, because
+                 create-tiddler delays refreshing its contents until its
+                 invoked, which we need, since that `<%if` block depends on
+                 content made by prior actions. -->
+            <$action-createtiddler $basetitle=<<state>> $overwrite=yes>
+              <%if [<imageStore>is[image]!type[image/svg+xml]] %>
+                <!-- Don't use tm-download-raw yourself.
+                     It's a hack. A workaround. A solution for chumps.
+                     I'm scrapping it as soon as TW supports image downloads -->
+                <$action-sendmessage $message="tm-download-raw"
+                  $param=<<imageStore>>
+                  filename={{{[{!!title}removeprefix[$:/graph/]] ~[{!!title}]}}}
+                  type={{{ [<imageStore>get[type]addsuffix[;base64]] }}} />
+              <%else%>
+                <$action-sendmessage $message="tm-download-file"
+                  $param="$:/core/templates/plain-text-tiddler"
+                  currentTiddler=<<imageStore>>
+                  filename={{{[{!!title}removeprefix[$:/graph/]] ~[{!!title}]}}}
+                  type={{{ [<imageStore>get[type]] }}} />
+              <%endif%>
+            </$action-createtiddler>
+            <$action-deletetiddler $tiddler=<<imageStore>> />
+            <$action-deletetiddler $tiddler=<<state>> />
+            <$transclude $field="description" $tiddler=`$:/language/Docs/Types/image/$(type)$`>
+              <$fill $name="ts-missing">
+                <$transclude $field="description" $tiddler={{{ [[$:/tags/Exporter]tagging[]] :filter[{!!title}get[extension]removeprefix[.]match<type>] }}} >
+                  <$fill $name="ts-missing">
+                    <$text text=<<type>> />
+                  </$fill>
+                </$transclude>
+              </$fill>
+            </$transclude>
+          </$button>
+        </$list>
+      </div>
+    </$reveal>
+  </$vars>
+<%endif%>

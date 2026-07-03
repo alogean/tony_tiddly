@@ -1,0 +1,77 @@
+title: $:/plugins/flibbles/graph/ui/SideBar
+caption: Graph
+tags: $:/tags/SideBar
+
+\procedure fs-state() $:/state/flibbles/graph/fullscreen
+
+\whitespace trim
+
+\parameters (state: "$:/config/flibbles/graph/sidebar", defaultGraph: "$:/graph/Default")
+
+\function graph() [<state>get[text]else<defaultGraph>]
+
+<$keyboard key="escape" actions="""<%if [<fs-state>is[tiddler]] %><$action-deletetiddler $tiddler=<<fs-state>> />""" >
+
+<div class="graph-sidebar-disabled graph-error tc-page-controls">
+
+<!-- Sidebar only works in fullscreen during mobile mode.
+     Otherwise, it's taking up too much space. -->
+
+  <$transclude $tiddler="$:/plugins/flibbles/graph/ui/Buttons/fullscreen" class=tc-btn-invisible $mode=inline />
+
+</div>
+<$boundingbox
+  class={{{ graph-sidebar-enabled [<fs-state>get[text]] +[join[ ]] }}}
+  width="[<windowWidth>subtract<boundingLeft>subtract[15]addsuffix[px]]"
+  height="[<windowHeight>subtract<boundingTop>subtract[15]addsuffix[px]]">
+
+  <$vars
+      graph-sidebar=yes
+      relayState=<<qualify graph-toolbar->> >
+
+    <$messagerelay to=<<relayState>> >
+
+      <div class="graph-sidebar-banner">
+
+        <$slot $name="banner">
+
+          <$select tiddler=<<state>> default=<<defaultGraph>> >
+
+            <$list filter="[<state>get[text]] [prefix[$:/graph/]else<defaultGraph>]"  >
+
+              <option value=<<currentTiddler>> >
+
+                <$view field=caption>
+
+                  <$text text={{{ [{!!title}removeprefix[$:/graph/]] }}} />
+
+                </$view>
+              </option>
+            </$list>
+          </$select>
+          <$vars currentTiddler=<<graph>> >
+
+            <$list filter="[[$:/tags/flibbles/graph/GraphToolbar]tagging[]!is[draft]] :filter[{!!title}addprefix[$:/config/flibbles/graph/GraphToolbarButtons/Visibility/]!text[hide]]" variable=listItem>
+
+              <$transclude tiddler=<<listItem>> mode=inline />
+
+            </$list>
+          </$vars>
+        </$slot>
+      </div>
+    </$messagerelay>
+    <$linkcatcher actions="""\whitespace trim
+      <%if [<fs-state>is[tiddler]] %>
+        <$action-listops $tiddler='$:/state/flibbles/graph/modal' $filter='[<navigateTo>]' />
+        <$action-sendmessage $message=tm-modal $param='$:/plugins/flibbles/graph/ui/Modals/Tiddler' tv-story-list='$:/state/flibbles/graph/modal' />
+      <%else%>
+        <$action-navigate $to=<<navigateTo>> />""">
+
+      <$graph.view $tiddler=<<graph>> $mode=inline >
+
+        <$messagerelay name=<<relayState>> />
+
+      </$graph.view>
+    </$linkcatcher>
+  </$vars>
+</$boundingbox>

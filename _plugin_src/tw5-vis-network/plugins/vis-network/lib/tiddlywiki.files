@@ -1,0 +1,27 @@
+{
+	"tiddlers": [
+		{
+			"file": "./vis-network.min.js",
+			"isTiddlerFile": false,
+			"fields": {
+				"title": {
+					"source": "filename",
+					"prefix": "$:/plugins/flibbles/vis-network/"
+				},
+				"type": "application/javascript",
+				"module-type": "library"
+			}
+		},
+		{
+			"file": "./icon.svg",
+			"isTiddlerFile": false,
+			"fields": {
+				"title": {
+					"source": "basename",
+					"prefix": "$:/plugins/flibbles/vis-network/"
+				},
+				"type": "image/svg+xml"
+			}
+		}
+	]
+}

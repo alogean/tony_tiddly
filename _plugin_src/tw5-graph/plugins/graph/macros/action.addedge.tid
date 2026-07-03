@@ -1,0 +1,16 @@
+\widget $action.addedge()
+\whitespace trim
+<$parameters
+	$$fromTiddler={{{ [<fromTiddler>!match[]else<currentTiddler>] }}}
+	$$toTiddler={{{ [<toTiddler>!match[]else<currentTiddler>] }}} >
+
+<$action-modal $tiddler="$:/plugins/flibbles/graph/ui/Modals/SelectField">
+
+  <$action-addtyped $tiddler=<<$fromTiddler>> $field=<<selection>> $value=<<$toTiddler>> />
+
+</$action-modal>
+<$action-sendmessage $message=tm-focus-selector $param="input.graph-select" />
+
+\end
+
+\relink $action.addedge $fromTiddler:title $oTiddler:title

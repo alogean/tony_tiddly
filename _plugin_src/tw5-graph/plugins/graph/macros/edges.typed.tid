@@ -1,0 +1,54 @@
+\widget $edges.typed($editable:no)
+\whitespace trim
+<$parameters
+	$$functions={{{ [<functionsFilter>!is[blank]] ~"[all[]]" }}}
+	$$fields={{{ [<fieldsFilter>!is[blank]] ~"[all[]]" }}}
+	$$tiddler=<<currentTiddler>> >
+
+<!-- First create edges for field types -->
+
+<$list variable=fieldName filter="+[subfilter{$:/plugins/flibbles/graph/subfilters##edgetypes.fields}subfilter<$fields>]">
+
+<$let
+	dataTiddler=`$:/config/flibbles/graph/edges/fields/$(fieldName)$` >
+
+<$properties $for=edges
+	$tiddler=<<dataTiddler>>
+	delete={{{ [<$editable>!match[no]then[<$action-removetyped $tiddler=<<fromTiddler>> $field=<<fieldName>> $value=<<toTiddler>> />]] }}} >
+
+
+<$list variable=toTiddler counter=index filter="[<$tiddler>] :map:flat[gettyped<fieldName>] +[!is[blank]]">
+
+<$vars id=`$:/edge/fields/$($tiddler)$
+$(fieldName)$-$(index)$`>
+
+<$slot $name=ts-raw>
+
+<$edge $from=<<$tiddler>> $id=<<id>> />
+
+</$slot></$vars></$list></$properties></$let></$list>
+
+<!-- Now create edges for function types -->
+
+<$list variable=functionName filter="[subfilter{$:/plugins/flibbles/graph/subfilters##edgetypes.functions}subfilter<$functions>]">
+
+<$let
+	dataTiddler=`$:/config/flibbles/graph/edges/functions/$(functionName)$`
+	function={{{ [<dataTiddler>get[filter]] }}} >
+
+<$properties $for=edges
+	$tiddler=<<dataTiddler>> >
+
+<$list variable=toTiddler counter=index filter="[<$tiddler>] :map:flat[subfilter<function>] +[!is[blank]]">
+
+<$vars id=`$:/edge/functions/$($tiddler)$
+$(functionName)$-$(index)$`>
+
+<$slot $name=ts-raw>
+
+<$edge $from=<<$tiddler>> $id=<<id>> />
+
+</$slot></$vars></$list></$properties></$let></$list>
+\end
+
+\relink $edges.typed $functions:filter $fields:filter $tiddler:title

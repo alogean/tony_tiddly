@@ -1,0 +1,23 @@
+title: $:/plugins/flibbles/graph/ui/Settings/Engine
+filter: [[graphengine]modules[]count[]compare:number:gt[1]]
+tags: $:/tags/flibbles/graph/SettingsTab
+caption: Engine
+
+\parameters (prompt: "Select a default engine for your TiddlyWiki to use.")
+
+<$transclude $variable=prompt />
+
+<div class=graph-engine-button-list>
+
+<$list filter="[subfilter{$:/plugins/flibbles/graph/subfilters##engine.list}]">
+
+<$let name={{{ [all[current]moduleproperty[name]] }}} >
+
+<$button class=graph-engine-button selectedClass=active set="$:/config/flibbles/graph/engine" setTo=<<name>> >
+
+<div class=graph-icon>
+
+<$transclude $tiddler={{{ [all[current]shadowsource[]addsuffix[/icon]is[shadow]] }}} />
+
+</div>
+<$text text=<<name>> />

@@ -1,0 +1,35 @@
+\whitespace trim
+
+\widget $doc.implementation()
+\define section-regexp() [\w\W]*(\\widget\s+\$$(caption)$[\w\W]*?\n\s*\\end(?:\s+$(caption)$)?(?:$|\n))[\W\w]*
+<$parameters tiddler=<<currentTiddler>> >
+
+<$vars .state=<<qualify "$:/state/editions/tw5-graph/">> >
+
+''Implementation''&#32;<%if [<.state>get[text]match[show]] %><$button set=<<.state>> setTo=hide>Hide</$button><%else%><$button set=<<.state>> setTo=show>Show</$button><%endif%>
+
+<%if [<.state>get[text]match[show]] %>
+
+<%if [{!!title}tag[Widgets]] %>
+
+<$let
+	caption={{{ [<tiddler>get[caption]] }}}
+	keyword=`$(caption)$(`
+	sourceTiddler={{{ [[$:/plugins/flibbles/graph]plugintiddlers[]search<keyword>] }}}
+	source={{{ [<sourceTiddler>get[text]] }}}
+	section={{{ [<source>search-replace::regexp<section-regexp>,[$1]] }}} >
+
+<$doc.codeblock code=<<section>> />
+
+</$let>
+
+<%elseif [{!!title}tag[Templates]] %>
+
+<$doc.codeblock code={{{ [{!!name}addprefix[$:/plugins/flibbles/graph/templates/]get[text]] }}} />
+
+<%else%>
+
+Unknown API type.
+
+<%endif%>
+\end

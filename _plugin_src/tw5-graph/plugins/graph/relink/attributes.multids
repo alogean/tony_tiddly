@@ -1,0 +1,19 @@
+title: $:/config/flibbles/relink/attributes/
+
+$action-addtyped/$field: fieldname
+$action-addtyped/$tiddler: title
+$action-delay/$state: title
+$action-modal/$tiddler: title
+$action-removetyped/$field: fieldname
+$action-removetyped/$tiddler: title
+$boundingbox/length: filter
+$boundingbox/width: filter
+$edge/$from: title
+$edge/$to: title
+$fieldtranscriber/state: title
+$fieldtranscriber/field: fieldname
+$fieldtranscriber/tiddler: title
+$node/$tiddler: title
+$properties/$tiddler: title
+$properties/$field: fieldname
+$properties/$filter: filter

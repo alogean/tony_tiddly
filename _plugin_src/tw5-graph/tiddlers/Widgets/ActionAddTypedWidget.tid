@@ -1,0 +1,36 @@
+title: ActionAddTypedWidget
+tags: ActionWidgets Widgets [[Core Widgets]] [[Typed Tools]]
+caption: action-addtyped
+
+! Introduction
+
+The <<.wid action-addtyped>> widget adds a value to a tiddler's field in a way that's reflective of how that field is configured through [[Relink]]. This allows you to use this same action to add to a variety of different fields without worrying about that field's configured type.
+
+! Contents and Attributes
+
+The content of an <<.wid action-addtyped>> widget is ignored.
+
+|!Attribute | !Description |
+|$tiddler |The tiddler whose field will be modified (defaults to the current tiddler) |
+|$field |The field which is to be modified |
+|$value |The value to add to the field |
+|$timestamp |Specifies whether the timestamp of the target tiddler will be updated (<<.field modified>> and <<.field modifier>>, plus <<.field created>> and <<.field creator>> for newly created tiddlers). Can be "yes" (the default) or "no" |
+
+{{Typed Tools}}
+
+! Examples
+
+<$doc.example
+	description="action-addtyped with graphs"
+	narrative="This shows how the action-addtyped can be used to add edges from a graph. Double click on nodes to add them."
+	content="""\procedure add() <$action-addtyped $tiddler='Output' $field='list' $value=<<nodeTiddler>> />
+
+<$graph>
+	<$node $tiddler="Output" color="brown"/>
+	<$edges.typed $tiddler="Output" $fields="list" />
+	<$list filter="Planck Bohr Einstein Heisenberg Newton Yalow Curie">
+		<$node label={{!!title}} actions=<<add>> />
+	</$list>
+</$graph>""" />
+
+{{Typed Tools (Examples)}}

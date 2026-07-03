@@ -1,0 +1,54 @@
+\widget $properties.settings()
+\whitespace trim
+
+<$properties.popup
+  $enabled={{!!popup}}
+  $ms={{{ [{!!title}get[popup.ms]else[600]] }}}
+  $width={{{ [{!!title}get[popup.width]else[300px]] }}}
+  $height={{{ [{!!title}get[popup.height]else[200px]] }}} >
+
+<$fill $name=tooltip>
+
+<$let
+  currentGraph=<<currentTiddler>>
+  currentTiddler=<<nodeTiddler>> >
+
+<%if [<currentGraph>has[popup.template]] %>
+
+<$transclude $tiddler=<<currentGraph>> $field="popup.template" />
+
+<%else%>
+
+{{}}
+<%endif%></$let></$fill>
+
+<$properties.river>
+
+<$properties $tiddler={{!!title}} $field="graph.edges" $for=edges >
+
+<$properties $tiddler={{!!title}} $field="graph.nodes" $for=nodes >
+
+<$properties.stack>
+
+<$let
+  fieldsFilter={{{ [{!!edges.fields}!is[blank]] ~"[all[]]" }}}
+  functionsFilter={{{ [{!!edges.functions}!is[blank]] ~"[all[]]" }}}>
+
+<$slot $name="ts-raw" $depth=4 />
+
+<%if [{!!neighbors.incoming}] =[{!!neighbors.outgoing}] +[match[1]count[]match[2]] %>
+
+<$properties $tiddler="$:/config/flibbles/graph/nodes/neighbors/1" >
+ 
+<$nodes.neighbors
+  $filter={{!!filter}}
+  $functions=<<functionsFilter>>
+  $fields=<<fieldsFilter>>
+  $interedges={{!!neighbors.interedges}}
+  $whitelist={{{ [{!!title}get[neighbors.whitelist]] ~"[!is[system]]" }}} />
+
+</$properties><%endif%></$let></$properties.stack></$properties></$properties>
+<$properties $tiddler={{!!title}} $field="graph.graph" $for=graph />
+
+</$properties.river></$properties.popup>
+\end

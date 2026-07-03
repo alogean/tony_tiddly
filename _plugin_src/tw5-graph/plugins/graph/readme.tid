@@ -1,0 +1,5 @@
+title: $:/plugins/flibbles/graph/readme
+
+//tw5-graph// is a plugin which provides a toolkit of widgets to interact with graph visualization software. This plugin does not include any visualization libraries itself. It must be coupled with a library plugin that acts as an engine.
+
+[ext[Project page is available on github.|https://github.com/flibbles/tw5-graph]]

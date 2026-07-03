@@ -1,0 +1,8 @@
+title: $:/config/flibbles/graph/edges/functions/links
+description: The tiddler contains a links of another resource.
+filter: [links[]]
+type: application/json
+
+{
+    "label": "links to"
+}

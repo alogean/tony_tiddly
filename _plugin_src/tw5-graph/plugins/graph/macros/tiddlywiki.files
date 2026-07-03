@@ -1,0 +1,17 @@
+{
+	"directories": [
+		{
+			"path": ".",
+			"filesRegExp": "^.*\\.tid$",
+			"isTiddlerFile": false,
+			"fields": {
+				"title": {
+					"source": "basename",
+					"prefix": "$:/plugins/flibbles/graph/macros/"
+				},
+				"tags": "$:/tags/Global",
+				"code-body": "yes"
+			}
+		}
+	]
+}

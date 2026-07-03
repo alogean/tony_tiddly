@@ -1,0 +1,34 @@
+\whitespace trim
+
+\procedure .graph() //TW5-Graph//
+\procedure .plus() <$button class=tc-btn-invisible>{{$:/core/images/new-button}}</$button>
+\procedure .gear() <$button class=tc-btn-invisible>{{$:/core/images/options-button}}</$button>
+
+\procedure .attr(_) <code class=doc-attr><<_>></code>
+\procedure .field(_) <code class=doc-field><<_>></code>
+\procedure .tid(_) <code class=doc-tiddler><$text text=<<_>>/></code>
+\procedure .wid(_) <code class=doc-widget>$<<_>></code>
+\procedure .value(_) <code class=doc-value><$text text=<<_>> /></code>
+\procedure .var(_) <code class=doc-var><<_>></code>
+\procedure .prop(_) <code class=doc-prop><$text text=<<_>> /></code>
+\procedure .tab(_) <code class=doc-value><$text text=<<_>> /></code>
+
+\widget $doc.note() ''Note:''&#32;<$slot $name=ts-raw />
+
+
+\widget $.action-navigatesettings(tab)
+<$parameters $params=extra>
+	<$action-navigate $to="$:/plugins/flibbles/graph/settings"/>
+	<$action-setfield
+		$tiddler="$:/state/flibbles/graph/settings"
+		text=`$:/plugins/flibbles/graph/ui/Settings/$(tab)$`/>
+	<$list variable=value filter="[<extra>jsonindexes[]!match[tab]]">
+		<$action-setfield
+			$tiddler=`$:/state/flibbles/graph/settings/$(value)$`
+			text={{{ [<extra>jsonget<value>] }}} />
+\end
+
+
+\procedure .wlink(to) <$link to=<<to>> ><$transclude $variable=.wid _={{{ [<to>get[caption]] }}} /></$link>
+
+\relink .wlink to

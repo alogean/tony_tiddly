@@ -1,0 +1,49 @@
+title: $:/plugins/flibbles/graph/ui/Settings/Graphs
+tags: $:/tags/flibbles/graph/SettingsTab
+caption: Graphs
+
+\whitespace trim
+\procedure graphList() :cache[all[shadows+tiddlers]insertafter{$:/config/flibbles/graph/sidebar}prefix[$:/graph/]else[$:/graph/Default]sort[]]
+
+<$transclude $tiddler="$:/plugins/flibbles/graph/ui/grouped-tabs"
+	tabsList=<<graphList>>
+	default={{{ [subfilter<graphList>] }}}
+	explicitState="$:/state/flibbles/graph/settings/graphs"
+>
+  <$fill $name=addButton>
+    <$button class="group-tab-new">
+      {{$:/core/images/new-button}}
+      <$action-modal $tiddler="$:/plugins/flibbles/graph/ui/Modals/NewGraph">
+        <$vars newTitle=`$:/graph/$(selection)$`>
+          <$action-createtiddler $basetitle=<<newTitle>> type="application/json" />
+          <$action-setfield $tiddler=<<qualifiedState>> text=<<newTitle>> />
+        </$vars>
+      </$action-modal>
+      <$action-sendmessage $message=tm-focus-selector $param="input.graph-select" />
+    </$button>
+  </$fill>
+  <$fill $name=button>
+    <$view tiddler=<<currentTab>> field=caption>
+      <$text text={{{ [<currentTab>removeprefix[$:/graph/]] }}} />
+    </$view>
+  </$fill>
+  <$fill $name=body>
+    <$let currentTiddler=<<currentTab>> >
+      <$transclude $tiddler="$:/plugins/flibbles/graph/ui/Settings/Graphs/EditTemplate" $mode=block />
+    </$let>
+
+    <$button>
+
+      <$vars graphName={{{ [<currentTab>removeprefix[$:/graph/]] }}}>
+        <$action-confirm $message=`Are you sure you wish to delete '$(graphName)$'`>
+          <%if [{$:/config/flibbles/graph/sidebar}match<currentTab>] %>
+            <$action-deletetiddler $tiddler="$:/config/flibbles/graph/sidebar"/>
+          <%endif%>
+          <$action-deletetiddler $tiddler=<<currentTab>>/>
+        </$action-confirm>
+      </$vars>
+
+      Delete Graph
+    </$button>
+  </$fill>
+</$transclude>

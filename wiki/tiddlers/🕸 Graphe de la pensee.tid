@@ -1,0 +1,20 @@
+title: 🕸 Graphe de la pensée
+
+! 🕸 La carte de tes idées
+
+Chaque nœud est une note ; chaque flèche est un lien `[[...]]` que tu as créé. Fais glisser pour explorer, clique un nœud pour le sélectionner. Plus tu relies tes notes, plus la carte devient riche.
+
+<$let graphengine="Vis-Network">
+<div style="height:72vh;border:1px solid #ddd;border-radius:10px;overflow:hidden;">
+<$graph>
+<$properties.stack>
+<$list filter="[tag[Note permanente]] [tag[Note littéraire]] [tag[Note fugace]] [tag[Projet]] [tag[Domaine]] +[!is[system]]">
+<$node label={{!!title}} color={{!!color}} />
+<$edges.typed $fields="[all[]] -[all[]]" />
+</$list>
+</$properties.stack>
+</$graph>
+</div>
+</$let>
+
+//Astuce : si le graphe est vide, ajoute des liens `[[...]]` entre tes notes puis reviens ici.//

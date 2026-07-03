@@ -1,0 +1,39 @@
+{
+  "name": "tw5-graph",
+  "version": "1.7.1",
+  "description": "Lightweight and programmable graphing for Tiddlywiki",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "build": "tiddlywiki ++node_modules/tw5-vis-network/plugins/vis-network ++node_modules/mermaid-tw5/mermaid-tw5/plugins/mermaid-tw5 --build index bundle",
+    "test": "tiddlywiki ++node_modules/tw5-vis-network/plugins/vis-network ++node_modules/mermaid-tw5/mermaid-tw5/plugins/mermaid-tw5 ++node_modules/tw5-relink/plugins/relink ++node_modules/tw5-relink/plugins/relink-fieldnames --build test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flibbles/tw5-graph.git"
+  },
+  "keywords": [
+    "tiddlywiki5",
+    "tiddlywiki-plugin",
+    "visualization-tools"
+  ],
+  "author": "Flibbles",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/flibbles/tw5-graph/issues"
+  },
+  "files": [
+    "plugins/"
+  ],
+  "homepage": "https://github.com/flibbles/tw5-graph#readme",
+  "dependencies": {
+    "tiddlywiki": "^5.3.8"
+  },
+  "devDependencies": {
+    "tw5-relink": "github:flibbles/tw5-relink",
+    "tw5-vis-network": "github:flibbles/tw5-vis-network#v10.6.3",
+    "mermaid-tw5": "github:flibbles/mermaid-tw5"
+  }
+}

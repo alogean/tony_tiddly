@@ -1,0 +1,109 @@
+title: $:/plugins/flibbles/graph/ui/grouped-tabs
+code-body: yes
+
+\procedure grouped-tabs-button()
+\whitespace trim
+<$button
+  class="group-tab-button"
+  set=<<tabsState>>
+  setTo=<<currentTab>>
+  dragTiddler=<<currentTab>>
+  default=<<default>>
+  selectedClass="tc-tab-selected"
+  tooltip={{!!tooltip}}
+  role="switch"
+  data-tab-title=<<currentTab>>
+>
+  <%if [<orderable>match[yes]] %>
+    {{$:/plugins/flibbles/graph/images/drag}}
+  <%endif%>
+  <$tiddler tiddler=<<save-currentTiddler>>>
+    <$vars tv-wikilinks="no">
+      <span>
+        <$slot $name=button>
+          <$transclude tiddler=<<currentTab>> field="caption">
+            <$macrocall $name="currentTab" $type="text/plain" $output="text/plain"/>
+          </$transclude>
+        </$slot>
+      </span>
+    </$vars>
+  </$tiddler>
+</$button>
+\end
+
+\define grouped-tabs-tab()
+\whitespace trim
+<$set name="save-currentTiddler" value=<<currentTiddler>>>
+  <$tiddler tiddler=<<currentTab>>>
+    <$transclude $variable=grouped-tabs-button $fillignore=yes />
+  </$tiddler>
+</$set>
+\end
+
+\procedure grouped-tabs-tab-body()
+\whitespace trim
+<$list filter=<<groupsList>> variable="currentGroup">
+  <$list filter=<<tabsList>> variable="currentTab">
+    <$reveal type="match" state=<<tabsState>> text=<<currentTab>> default=<<default>> retain=<<retain>> tag="div">
+      <$slot $name=body />
+    </$reveal>
+  </$list>
+</$list>
+\end
+
+\function sort.by(tiddler) [<tiddler>each:list-item[list]is[tiddler]] =[all[]] +[unique[]]
+
+\procedure grouped-tabs-drop-actions()
+<$action-log
+	actionTiddler=<<actionTiddler>>
+	currentTab=<<currentTiddler>>
+/>
+<$action-listops
+  $tiddler=<<orderTiddler>>
+  $field=list
+  $filter="[subfilter<tabsList>sort.by<orderTiddler>] +[insertbefore<actionTiddler>,<currentTab>]"/>
+\end
+
+\procedure grouped-tabs-tab-list()
+\whitespace trim
+<$list variable=currentGroup filter=<<groupsList>> >
+  <$let orderTiddler={{{ [<currentGroup>subfilter<orderFilter>] }}}
+        orderable={{{ [<orderTiddler>!is[blank]then[yes]else[no]] }}} >
+    <%if [<currentGroup>!is[blank]] %>
+      <div class="group-tab-header"><$text text={{{ [<currentGroup>titlecase[]] }}} /></div>
+    <%endif%>
+    <$list variable=currentTab filter="[subfilter<tabsList>sort.by<orderTiddler>]" >
+      <$droppable
+          actions=<<grouped-tabs-drop-actions>>
+          enable=<<orderable>> >
+        <div class="tc-droppable-placeholder"/>
+        <$transclude $variable=grouped-tabs-tab $fillignore=yes/>
+      </$droppable>
+    </$list>
+    <$tiddler tiddler="">
+      <$droppable
+          actions=<<grouped-tabs-drop-actions>>
+          enable=<<orderable>> >
+        <div class="tc-droppable-placeholder"/>
+        <$slot $name=addButton />
+      </$droppable>
+    </$tiddler>
+  </$let>
+</$list>
+\end
+
+\parameters (tabsList, groupsList:"[[]]", state:"$:/state/flibbles/graph/grouped-tab", explicitState, default, class:"tc-vertical", retain, orderFilter)
+
+<$qualify title=<<state>> name=qualifiedState>
+  <$let tabsState={{{ [<explicitState>minlength[1]] ~[<qualifiedState>] }}}>
+    <div class={{{ [[tc-tab-set]addsuffix[ ]addsuffix<class>] }}}>
+      <div class={{{ [[tc-tab-buttons]addsuffix[ ]addsuffix<class>] }}}>
+        <$transclude $variable=grouped-tabs-tab-list $fillignore=yes />
+      </div>
+      <div class={{{ [[tc-tab-divider]addsuffix[ ]addsuffix<class>] }}}/>
+      <div class={{{ [[tc-tab-content]addsuffix[ ]addsuffix<class>] }}}>
+        <$transclude $variable=grouped-tabs-tab-body $fillignore=yes />
+      </div>
+    </div>
+  </$let>
+</$qualify>

@@ -1,0 +1,49 @@
+title: EdgeWidget
+tags: Widgets [[Core Widgets]] GraphObjectWidget
+caption: edge
+
+! Introduction
+
+Use the edge widget inside of a <<.wlink GraphWidget>> to define an edge connecting two nodes together. Like all graph objects, edges can have a variety of properties depending on the engine you're using, which can be set within the widget, or by a containing <<.wlink PropertiesWidget>>.
+
+The node widget does not create any DOM nodes.
+
+! Content and Attributes
+
+All node widgets correspond to a tiddler. This tiddler does not have to exist.
+
+|!Attribute |!Description |
+|$id |The unique id for this tiddler. You can leave it blank, and it will be auto generated. |
+|$from |The tiddler whose node this edge stems from (defaults to the [[current tiddler|Current Tiddler]]) |
+|$to |The tiddler whose node this edge goes to. This must be set. |
+|//{attributes not starting with $)// |Any other attributes that do not start with a dollar sign are passed to the graphing engine as properties of this edge |
+|!Below are commonly-used properties used by all engines. |<|
+|color |Sets the color of the edge. |
+|label |Sets a label that appears with the edge. |
+
+! Omission
+
+!!! $to
+
+If <<.attr $to>> is not set, or either node that the edge connects to is missing from the graph, then the edge will be ignored.
+
+!!! $id
+
+You don't have to specify an <<.attr $id>>. <<.graph>> will take care of autogenerating one, which is simpler for you, because making sure an edge has a unique id when edges can share the same <<.attr $from>> and <<.attr $to>> can be a headache.
+
+The only case when you'd want to assign an ID to an edge is so that your graph preserves edges whenever it refreshes, instead of constantly replacing them, because recreating them is slightly inefficient, and it can cause a graph to "tremble" as its edges reset with every refresh.
+
+Not a big deal, right? Don't worry about setting an <<.attr $id>> unless you're making a macro widget which you want to be production-grade robust and efficient, and all the [[macro widgets|Widgets]] that come with <<.graph>> already take care of this themselves.
+
+! Edge Properties
+
+The available edge properties the widget can configure depends on which engine you're using. These are the same properties available in the properties table for edges. [[You can see here for more details.|Graph Properties]]
+
+!!! Action properties
+
+All action properties, whether defined by this edge or a containing <<.wlink PropertiesWidget>>, will execute with the following variables defined as available context:
+
+|!Variables |!Description |
+|`id` |The id the target edge, likely auto-generated |
+|`fromTiddler` |The title of the tiddler from which this node originates |
+|`toTiddler` |The title of the tiddler to which this node points |

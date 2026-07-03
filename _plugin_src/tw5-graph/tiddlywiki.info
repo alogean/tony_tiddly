@@ -1,0 +1,38 @@
+{
+	"description": "Testing documentation, and demo framework for tw5-relink",
+	"plugins": [
+		"tiddlywiki/jasmine",
+		"tiddlywiki/railroad"
+	],
+	"themes": [
+		"tiddlywiki/vanilla",
+		"tiddlywiki/snowwhite"
+	],
+	"build": {
+		"test": [
+			"--rendertiddler", "$:/core/save/all", "test.html", "text/plain", "",
+				"publishFilter",
+				"-$:/DefaultTiddlers -[!is[system]] -[prefix[$:/state]] -[prefix[$:/graph/]] -[prefix[$:/editions/]] -[prefix[$:/themes/]!has[plugin-type]] -[prefix[$:/config/]!match[$:/config/flibbles/graph/engine]]",
+			"--test"
+		],
+		"bundle": [
+			"--render",
+				"$:/plugins/flibbles/graph",
+				"graph.json",
+				"text/plain",
+				"$:/core/templates/html-json-tiddler"
+		],
+		"index": [
+			"--render",
+				"$:/core/save/offline-external-js",
+				"index.html",
+				"text/plain",
+				"",
+				"publishFilter", "-[prefix[$:/test/]] -$:/plugins/tiddlywiki/jasmine -[prefix[$:/plugins/flibbles/relink]] -[prefix[$:/UpgradeLibrary]]",
+				"coreURL", "tiddlywikicore.js",
+			"--render",
+				"$:/core/templates/tiddlywiki5.js",
+				"tiddlywikicore.js","text/plain"
+		]
+	}
+}

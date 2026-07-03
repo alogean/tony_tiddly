@@ -1,0 +1,76 @@
+\widget $properties.popup($enabled:yes $ms:600, $width, $height:50%, $for:nodes)
+\whitespace trim
+
+<$parameters $state={{{ [<qualify "$:/state/graph/tooltip">addsuffix[-]addsuffix<$for>] }}} >
+
+<$let state=<<$state>>
+	delayState=`$(state)$-delay`
+	blurringState=`$(state)$-interrupt`
+	draggingState=`$(state)$-dragging`
+	$msLinger=0>
+
+<$properties $for={{{ [<$enabled>match[yes]then<$for>] }}}
+  hover="""\whitespace trim
+    <%if [<draggingState>] [<state>] +[is[tiddler]count[]match[0]] %>
+      <$action-delay $state=<<delayState>> $ms=<<$ms>> >
+        <$action-with $offset="mouse" $canvas=canvas>
+          <$vars
+              lr={{{ [<mouse-x>multiply[2]compare:number:gt<canvas-width>then[right]else[left]] }}}
+              tb={{{ [<mouse-y>multiply[2]compare:number:gt<canvas-height>then[bottom]else[top]] }}} >
+            <$action-popup $state=<<$state>> $coords="(0,0,0,0)"/>
+            <$genesis $type=$action-setfield $$tiddler=<<$state>>
+              $names="[<$for>subfilter{$:/plugins/flibbles/graph/subfilters##actioncontext}addprefix[context.]]"
+              $values="[<$for>subfilter{$:/plugins/flibbles/graph/subfilters##actioncontext}getvariable[]]"
+              x={{{ [<lr>match[left]then<mouse-x>] ~[<canvas-width>subtract<mouse-x>] }}}
+              y={{{ [<tb>match[top]then<mouse-y>] ~[<canvas-height>subtract<mouse-y>] }}}
+              lr=<<lr>>
+              tb=<<tb>> />
+          </$vars>
+        </$action-pointer>
+      </$action-delay>
+    <%endif%>
+    <$action-deletetiddler $tiddler=<<blurringState>> />"""
+  blur="""\whitespace trim
+    <$action-delay $state=<<blurringState>> $ms=<<$msLinger>> >
+      <$action-deletetiddler $tiddler=<<delayState>> />
+      <$action-popup $state=<<state>> />"""
+  drag="""\whitespace trim
+    <$action-deletetiddler $tiddler=<<delayState>> />
+    <$action-popup $state=<<state>> />
+    <$action-setfield $tiddler=<<draggingState>> text=dragging />"""
+  free='<$action-deletetiddler $tiddler=<<draggingState>> />' >
+
+<$slot $name="ts-raw" />
+
+</$properties>
+
+<$vars
+  x={{{ [<$state>get[x]] }}}
+  y={{{ [<$state>get[y]] }}}
+  lr={{{ [<$state>get[lr]] }}}
+  tb={{{ [<$state>get[tb]] }}}
+  width={{{ [<$width>!is[blank]addprefix[max-width:]addsuffix[;]] }}} >
+
+<!-- We aren't using the popup type because we need to be more dynamic about placing the popup in different directions. The text must be a coord because of $action-popup, but we don't use it. -->
+
+<%if [<$enabled>match[yes]] %>
+
+<$reveal
+  type=match
+  text="(0,0,0,0)"
+  state=<<$state>>
+  positionAllowNegative=yes
+  class="graph-popup tc-popup tc-popup-keep"
+  style=`$(width)$max-height:$($height)$;$(lr)$:$(x)$px;$(tb)$:$(y)$px;`>
+
+<$genesis $type=$vars
+  $names="[<$state>fields[]removeprefix[context.]]"
+  $values="[<$state>fields[]prefix[context.]] :map[<$state>get{!!title}]" >
+
+<$slot $name=tooltip>
+
+<$transclude $tiddler=<<nodeTiddler>> />
+
+\end
+
+\relink $properties.popup $state:title

@@ -1,0 +1,9 @@
+# Dépendances (réinstallables via npm install)
+node_modules/
+
+# Sortie de build (régénérable via ./build.sh)
+wiki/output/
+
+# Divers
+.DS_Store
+*.log

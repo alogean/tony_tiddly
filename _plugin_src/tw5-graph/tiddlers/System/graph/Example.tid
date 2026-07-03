@@ -1,0 +1,3 @@
+title: $:/graph/Example
+filter: [tag[Deity]!is[system]!is[draft]]
+type: application/json

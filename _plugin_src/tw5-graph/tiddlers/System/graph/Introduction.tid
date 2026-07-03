@@ -1,0 +1,15 @@
+title: $:/graph/Introduction
+edges.fields: [all[]] -tags wrote builds-upon
+graph.nodes: {"size":"25"}
+filter: [tag[Introduction]]
+type: application/json
+
+{
+    "Flibbles": "112,-134",
+    "Uglify": "-30,-106",
+    "Relink": "0,-227",
+    "Graph": "0,0",
+    "Vis-Network": "-135,75",
+    "TiddlyWiki": "147,4",
+    "Mermaid": "-135,-60"
+}

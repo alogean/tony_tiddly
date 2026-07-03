@@ -1,0 +1,37 @@
+\whitespace trim
+\widget $doc.example(description, narrative, content)
+
+  \function filter() [[$:/plugins/flibbles/graph]plugintiddlers[]removeprefix[$:/config/DefaultColourMappings/]] muted-foreground
+
+  <!-- We use $apply.colours to evaluate our color values in
+       the primary wiki context, because the standard <<colour>>
+       won't work in the testcase context. -->
+  \widget $apply.colours(nth:1)
+    <%if [function[filter]nth<nth>] %>
+      <$wikify name=<<condition>>  text=`<<colour "$(condition)$">>` >
+        <$transclude $variable="$apply.colours" nth={{{ [<nth>add[1]] }}} $fillignore=yes />
+      </$wikify>
+    <%else%>
+      <$slot $name=ts-raw />
+    <%endif%>
+  \end $apply.colours
+
+  \procedure inner()
+    \function colour(name) [<name>getvariable[]]
+      <$vars engine={{$:/config/flibbles/graph/engine}}>
+    <$testcase>
+        <$data title=Description text=<<description>> />
+        <$data title=Narrative text=<<narrative>> />
+        <$data title=Output text=<<content>> />
+        <$data title="$:/plugins/flibbles/graph-example-framework" type="application/json" plugin-type="plugin"
+          text=```{"tiddlers":{"$:/config/flibbles/graph/engine":{"text":"$(engine)$"}}}``` />
+        <$data $tiddler="$:/plugins/flibbles/graph" />
+        <$slot $name=ts-raw $depth=3 />
+    </$testcase>
+      </$vars>
+  \end inner
+
+  <$apply.colours>
+    <<inner>>
+  </$apply.colours>
+\end

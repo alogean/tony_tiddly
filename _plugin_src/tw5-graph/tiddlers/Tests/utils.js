@@ -1,0 +1,139 @@
+/*\
+
+Sets up some utilities for testing.
+
+\*/
+
+var test = $tw.test = {};
+var engineConfig = "$:/config/flibbles/graph/engine";
+test.utils = require("$:/plugins/flibbles/graph/utils.js");
+test.mock = $tw.modules.applyMethods("mocklibrary");
+
+test.setSpies = function(adapterName) {
+	var spies = test.spyOnAdapter(adapterName);
+	spies.register = spyOn($tw.test.utils, "registerForGarbageCollection");
+	spies.window = spyOn($tw.test.utils, "window").and.returnValue(new test.mock.Window(expect));
+	return spies;
+};
+
+test.spyOnAdapter = function(adapterName) {
+	adapterName = adapterName || "Test";
+	var Adapter = test.utils.getEngineMap()[adapterName].prototype;
+	return {
+		properties: Adapter.properties,
+		update: spyOn(Adapter, "update").and.callThrough(),
+		init: spyOn(Adapter, "init").and.callThrough(),
+		destroy: spyOn(Adapter, "destroy").and.callThrough(),
+		testRules: function(category, returnValue) {
+			spyOnProperty(this.properties, category, "get").and.returnValue(returnValue);
+		}
+	};
+};
+
+test.setGlobals = async function(wiki) {
+	wiki.addTiddler($tw.wiki.getTiddler("$:/plugins/flibbles/graph"));
+	wiki.addTiddler($tw.wiki.getTiddler("$:/core"));
+	wiki.readPluginInfo();
+	wiki.registerPluginTiddlers("plugin");
+	wiki.unpackPluginTiddlers();
+	// If I don't do this, then all those imported tiddlers will force a
+	// refresh for any test I run. It will also cause any graph objects
+	// to be destroyed AFTER any test with a graph is run.
+	// NOTE: This problem only occurs on the browser, it seems.
+	await $tw.test.flushChanges();
+};
+
+Object.defineProperty(test, 'adapterAlso', {
+	get: function() {
+		return test.utils.getEngineMap().Also.prototype;
+	}
+});
+
+/*
+ * Renders text into a widget tree.
+ */
+test.renderText = function(wiki, text, options) {
+	if (!wiki.tiddlerExists(engineConfig)) {
+		wiki.addTiddler({title: engineConfig, text: "Test"});
+	}
+	var parser = wiki.parseText("text/vnd.tiddlywiki", text);
+	var widgetNode = wiki.makeWidget(parser, options);
+	var container = $tw.fakeDocument.createElement("div");
+	wiki.addEventListener("change", function(changes) {
+		widgetNode.refreshChildren(changes);
+	});
+	widgetNode.render(container, null);
+	return widgetNode;
+};
+
+test.renderGlobal = function(wiki, text) {
+	return test.renderText(wiki, "\\import [subfilter{$:/core/config/GlobalImportFilter}]\n" + text);
+};
+
+test.renderAction = function(wiki, text) {
+	var widgetNode = test.renderGlobal(wiki, text);
+	// Action widgets should not be introducing content to the DOM.
+	expect(widgetNode.parentDomNode.innerHTML).toBe("");
+	return widgetNode;
+};
+
+test.flushChanges = function(ms) {
+	return new Promise(function(resolve, reject) {
+		// I'm using this instead of $tw.utils.nextTick(resolve) because
+		// they use different queues or something? Putting events sequentually
+		// on the two result in different run orders, which doesn't work for
+		// testing action-delay.
+		//$tw.utils.nextTick(resolve);
+		setTimeout(resolve, ms || 0);
+	});
+};
+
+test.draft = function(tiddlerFields) {
+	var title = tiddlerFields.title;
+	return Object.assign(
+		{"draft.of": title, "draft.title": title},
+		tiddlerFields,
+		{title: `Draft of '${title}'`});
+};
+
+var testResolve;
+
+test.actionMethod = function(attributes) {
+	if (testResolve) {
+		var resolve = testResolve;
+		testResolve = null;
+		resolve(attributes);
+	} else {
+		fail("action-test called without $tw.test.actionMethod being spied upon or promised anything.");
+	}
+};
+
+test.actionToBeCalled = function() {
+	return new Promise((resolve, reject) => {
+		testResolve = resolve;
+	});
+};
+
+test.dispatchEvent = function(wiki, params, variables, callback) {
+	var event = createEvent(params.type);
+	var spy;
+	if (test.actionMethod.calls) {
+		spy = test.actionMethod;
+		spy.calls.reset();
+	} else {
+		spy = spyOn(test, "actionMethod");
+	}
+	if (callback) {
+		spy.and.callFake(callback);
+	}
+	params.event = event;
+	test.latestEngine.dispatchEvent(params, variables, expect);
+};
+
+function createEvent(type) {
+	if (typeof Event !== "undefined") {
+		return new Event(type);
+	} else {
+		return {type: type};
+	}
+};

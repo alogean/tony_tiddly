@@ -1,0 +1,272 @@
+title: $:/plugins/flibbles/graph/stylesheets/base.css
+tags: $:/tags/Stylesheet
+
+\define sidebarbreakpoint()
+<$text text={{$:/themes/tiddlywiki/vanilla/metrics/sidebarbreakpoint}}/>
+\end
+
+\rules only macrocallinline
+.graph-canvas {
+	position: relative;
+	border-style: solid;
+	border-width: 1px;
+	border-color: <<colour graph-border>>;
+	background-color: <<colour graph-background>>;
+	width: 100%;
+}
+
+.boundingbox {
+	display: flex;
+	flex-direction: column;
+}
+
+.boundingbox > .graph-canvas {
+	width: 100%;
+	height: 0%;
+	flex-grow: 1;
+}
+
+/*** Basic graph overlay options ***/
+
+.graph-overlay {
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	margin: 0px;
+	background: transparent;
+	border-width: 0px;
+}
+
+/*** Error-state graphs ***/
+
+.graph-canvas.graph-error {
+	align-content: center;
+	text-align: center;
+	font-weight: bold;
+	color: <<colour alert-highlight>>;
+}
+
+.graph-canvas.graph-error span {
+	display: inline-block;
+	max-width: 80%;
+	background: <<colour alert-background>>;
+	padding: 1em;
+	border: medium solid <<colour alert-border>>;
+	border-radius: 1em;
+
+}
+
+/*** SideBar ***/
+
+.tc-sidebar-scrollable .graph-sidebar-disabled {
+	display: none;
+}
+
+.tc-sidebar-scrollable .graph-sidebar-enabled {
+	position: absolute;
+}
+
+.graph-sidebar-banner {
+	background: <<colour graph-banner-background>>;
+	color: <<colour graph-banner-foreground>>;
+	padding: 4px;
+}
+
+.graph-sidebar-banner select, .graph-sidebar-banner button {
+	height: 28px;
+	min-width: 28px;
+	margin-left: 3px;
+}
+
+@media (max-width: <<sidebarbreakpoint>>) {
+	.tc-sidebar-scrollable .graph-sidebar-enabled {
+		display: none;
+	}
+
+	.tc-sidebar-scrollable .graph-sidebar-disabled {
+		display: flex;
+	}
+
+	.tc-sidebar-scrollable .graph-sidebar-disabled button {
+		margin: auto;
+	}
+
+	.tc-sidebar-scrollable .graph-sidebar-disabled button svg {
+		width: 2em;
+		height: 2em;
+	}
+}
+
+/*** Sidebar Center button ***/
+
+.graph-center-button-dropdown {
+	padding-left: 6px;
+	padding-right: 6px;
+}
+
+.graph-center-button-dropdown input {
+	width: 100%;
+}
+
+/*** Engine toggle buttons ***/
+
+.graph-engine-button-list {
+	display: flex;
+	justify-content: center;
+}
+
+.graph-engine-button {
+	margin: 1em;
+	width: 7em;
+	height: 124px;
+	border-radius: 1em;
+	vertical-align: top;
+	font-weight: bold;
+	text-align: center;
+	background-color: <<colour background>>;
+	border-color: <<colour table-footer-background>>;
+}
+
+.graph-engine-button .graph-icon {
+	height: 6em;
+	margin-bottom: 4px;
+	align-content: center;
+}
+
+.graph-engine-button.active {
+	background-color: <<colour table-header-background>>;
+}
+
+.graph-engine-button:hover {
+	background-color: <<colour table-header-background>>;
+}
+
+/*** grouped-tabs ***/
+
+.group-tab-header {
+	font-weight: bold;
+	margin-right: 0.0em;
+	margin-top: 1em;
+	border: 1px solid <<color tab-border>>;
+	padding: 3px 5px 0px 5px;
+	border-top-left-radius: 1em;
+}
+
+.tc-tab-buttons.tc-vertical button.group-tab-button {
+	display: flex;
+	padding-left: 0px;
+}
+
+button.group-tab-button > svg {
+	margin-top: auto;
+	margin-bottom: auto;
+}
+
+button.group-tab-button > span {
+	margin-left: 5px;
+	flex-grow: 1;
+}
+
+.tc-tab-buttons.tc-vertical button.group-tab-new {
+	border-bottom-left-radius: 1em;
+	border-bottom-right-radius: 1em;
+	border-right: 1px solid <<color tab-border>>;
+}
+
+button.group-tab-new svg {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/*** Settings: Graphs ***/
+
+.graph-tiddlers-edgelist {
+	color: <<colour muted-foreground>>;
+}
+
+.graph-tiddlers-edgelist .active {
+	color: <<colour foreground>>;
+}
+
+/*** GraphTiddler Edit-template ***/
+
+.graph-tiddler-edit-template {
+	border-top: 1px solid <<colour blockquote-bar>>;
+}
+
+.graph-tiddler-edit-template table,
+.graph-tiddler-edit-template table textarea,
+.graph-tiddler-edit-template table input {
+	width: 100%;
+}
+
+/*** Graph Property Table ***/
+
+table.graph-property {
+	width: 100%;
+	padding: 3px;
+}
+
+table .graph-property-input {
+	min-width: 8em;
+	border-right-width: 0px;
+}
+
+table .graph-property-remove {
+	width: 2em;
+	border-left-width: 0px;
+}
+
+/*** Graph Property Table Types ***/
+
+table.graph-property input {
+	width: 100%;
+}
+
+table.graph-property td {
+	padding: 4px;
+}
+
+table.graph-property td.graph-property-input-color {
+	display: flex;
+	gap: 4px;
+	width: 100%;
+}
+
+table.graph-property td.graph-property-input-color input {
+	flex: 1;
+}
+
+table.graph-property .graph-property-input-number {
+	display: flex;
+	gap: 2px;
+	width: 100%;
+}
+
+table.graph-property .graph-property-input-number input {
+	flex-grow: 1;
+	width: 60%;
+}
+
+table.graph-property .graph-property-input-number span {
+	flex: 1;
+	margin-left: 5px;
+	min-width: 2em;
+	vertical-align: top;
+	font-weight: lighter;
+}
+
+/*** Graph icon ***/
+
+.graph-icon-node {
+	fill: <<colour graph-node-color>> !important;
+}
+
+a.tc-tiddlylink.tc-plugin-info:hover .graph-icon-splash {
+	fill: <<colour background>> !important;
+}
+
+a.tc-tiddlylink.tc-plugin-info:hover .graph-icon-node {
+	fill: <<colour muted-foreground>> !important;
+}

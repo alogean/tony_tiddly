@@ -1,0 +1,4 @@
+title: $:/graph/Pantheon
+filter: [tag[Deity]!is[draft]]
+graph.nodes: {"physics":"yes"}
+type: application/json

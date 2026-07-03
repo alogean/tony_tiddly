@@ -1,0 +1,49 @@
+{
+	"directories": [
+		{
+			"path": ".",
+			"filesRegExp": "^.*\\.tid$",
+			"isTiddlerFile": false,
+			"fields": {
+				"caption": {
+					"source": "basename"
+				},
+				"title": {
+					"source": "basename",
+					"suffix": " GraphObject"
+				},
+				"tags": "[[Graph Objects]]"
+			}
+		},
+		{
+			"path": "./Edges",
+			"filesRegExp": "^.*\\.tid$",
+			"isTiddlerFile": false,
+			"fields": {
+				"caption": {
+					"source": "basename"
+				},
+				"title": {
+					"source": "basename",
+					"suffix": " EdgeType"
+				},
+				"tags": "[[Edges GraphObject]]"
+			}
+		},
+		{
+			"path": "./Nodes",
+			"filesRegExp": "^.*\\.tid$",
+			"isTiddlerFile": false,
+			"fields": {
+				"caption": {
+					"source": "basename"
+				},
+				"title": {
+					"source": "basename",
+					"suffix": " NodeType"
+				},
+				"tags": "[[Nodes GraphObject]]"
+			}
+		}
+	]
+}

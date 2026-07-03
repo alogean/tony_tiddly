@@ -1,0 +1,8 @@
+title: $:/config/flibbles/graph/nodes/neighbors/1
+caption: All
+description: Applies to the first generation of neighbors, hence why it's called "1". But currently only one is allowed, which is why the caption is "All".
+type: application/json
+
+{
+    "color": "muted-foreground"
+}

@@ -1,0 +1,14 @@
+{
+	"name": "Graph",
+	"title": "$:/plugins/flibbles/graph",
+	"description": "Lightweight and programmable graphing for Tiddlywiki",
+	"author": "Flibbles",
+	"version": "1.7.1",
+	"stability": "STABILITY_2_STABLE",
+	"core-version": ">=5.3.7",
+	"source": "https://github.com/flibbles/tw5-graph",
+	"demo": "http://flibbles.github.io/tw5-graph/",
+	"list": "readme settings",
+	"dependents": "",
+	"plugin-type": "plugin"
+}

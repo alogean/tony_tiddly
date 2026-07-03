@@ -1,0 +1,9 @@
+\widget $doc.inhouse()
+\whitespace trim
+<$parameters $parseMode=mode>
+
+<$genesis $type={{{ [<mode>match[block]then[div]else[span]] }}} class='doc-inhouse'>
+
+<$slot $name=ts-raw />
+
+\end

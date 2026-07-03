@@ -1,0 +1,26 @@
+title: 📐 Conventions
+
+! 📐 Comment utiliser ce second cerveau
+
+!! Les 4 règles Zettelkasten
+
+# **Atomicité** — une note = une seule idée, compréhensible seule. Voir [[Note atomique]].
+# **Liens** — relie chaque note à d'autres avec la syntaxe `[[Titre de la note]]`. La valeur est dans le réseau. Voir [[Liens et backlinks]].
+# **Titres permanents** — ne renomme pas une note une fois créée (les liens casseraient).
+# **Tes propres mots** — reformule, ne copie jamais. L'effort de reformulation *est* l'apprentissage.
+
+!! Le flux (3 types de notes)
+
+# [[Note fugace]] — capture rapide, jetable.
+# [[Note littéraire]] — ce que tu retiens d'une source, reformulé.
+# [[Note permanente]] — l'idée mûrie, atomique, reliée. Le cœur du système.
+
+!! Par-dessus : [[Méthode PARA]]
+
+Classe ce qui est **actionnable** avec les tags : [[Projet]], [[Domaine]], [[Ressource]], [[Archive]].
+
+!! Comment créer des liens
+
+Dans le texte d'une note, écris `[[Zettelkasten]]` pour créer un lien. Le lien apparaît dans le [[🕸 Graphe de la pensée]] et dans les //backlinks// (panneau info de la note, icône ℹ️).
+
+> 💡 Règle d'or : ne collectionne pas pour collectionner. Une note ne vaut que si elle nourrit une **production** (un post, une œuvre, une offre, une décision).

@@ -1,0 +1,178 @@
+/*\
+
+Tests the graph.view global widget.
+
+\*/
+
+describe('graph.view \\widget', function() {
+
+var wiki, init, update;
+
+beforeEach(async function() {
+	wiki = new $tw.Wiki();
+	({init, update} = $tw.test.setSpies());
+	await $tw.test.setGlobals(wiki);
+});
+
+/*** $engine ***/
+
+it("uses the global engine if non specified", function() {
+	wiki.addTiddlers([
+		{title: "Target", template: "Template"},
+		{title: "Template", text: "<<graphengine>>"}]);
+	var text = "<$graph.view $tiddler=Target />\n";
+	var widget = $tw.test.renderGlobal(wiki, text);
+	// "Test" is the default engine specified in renderGlobal
+	expect(widget.parentDomNode.innerHTML).toBe("<p>Test</p>");
+});
+
+it("uses field-specified engine", function() {
+	wiki.addTiddlers([
+		{title: "Target", template: "Template", engine: "Fielded"},
+		{title: "Template", text: "<<graphengine>>"}]);
+	var text = "<$graph.view $tiddler=Target />\n";
+	var widget = $tw.test.renderGlobal(wiki, text);
+	expect(widget.parentDomNode.innerHTML).toBe("<p>Fielded</p>");
+});
+
+it("ignores blank field-specified engine", function() {
+	wiki.addTiddlers([
+		{title: "Target", template: "Template", engine: ""},
+		{title: "Template", text: "<<graphengine>>"}]);
+	var text = "<$graph.view $tiddler=Target />\n";
+	var widget = $tw.test.renderGlobal(wiki, text);
+	// "Test" is the default engine specified in renderGlobal
+	expect(widget.parentDomNode.innerHTML).toBe("<p>Test</p>");
+});
+
+it("uses widget-specified engine", function() {
+	wiki.addTiddlers([
+		{title: "Target", template: "Template"},
+		{title: "Template", text: "<<graphengine>>"}]);
+	var text = "<$graph.view $engine=Widgeted $tiddler=Target />\n";
+	var widget = $tw.test.renderGlobal(wiki, text);
+	expect(widget.parentDomNode.innerHTML).toBe("<p>Widgeted</p>");
+});
+
+it("prefers widget-specified engine over field-specified", function() {
+	wiki.addTiddlers([
+		{title: "Target", template: "Template", engine: "Fielded"},
+		{title: "Template", text: "<<graphengine>>"}]);
+	var text = "<$graph.view $engine=Widgeted $tiddler=Target />\n";
+	var widget = $tw.test.renderGlobal(wiki, text);
+	expect(widget.parentDomNode.innerHTML).toBe("<p>Widgeted</p>");
+});
+
+/*** $tiddler and $template attributes ***/
+
+it("uses a standard graph if no template specified", function() {
+	wiki.addTiddler({title: "Target", filter: "A"});
+	var text = "<$graph.view $tiddler=Target />\n";
+	var widget = $tw.test.renderGlobal(wiki, text);
+	var objects = init.calls.first().args[1];
+	expect(Object.keys(objects.nodes)).toEqual(["A"]);
+	expect(widget.parentDomNode.textContent).toBe("");
+});
+
+it("uses template specified by the $tiddler", function() {
+	wiki.addTiddlers([
+		{title: "Target", text: "Target content", template: "Template"},
+		{title: "Template", text: "Temp: {{}}"}]);
+	var text = "<$graph.view $tiddler=Target />\n";
+	var widget = $tw.test.renderGlobal(wiki, text);
+	expect(widget.parentDomNode.innerHTML).toBe("<p>Temp: Target content</p>");
+});
+
+it("can specify custom $template", function() {
+	wiki.addTiddlers([
+		{title: "Target", text: "Target content", template: "Template"},
+		{title: "Template", text: "Temp: {{}}"},
+		{title: "Alternate", text: "Alter: {{}}"}]);
+	var text = "<$graph.view $tiddler=Target $template=Alternate/>\n";
+	var widget = $tw.test.renderGlobal(wiki, text);
+	expect(widget.parentDomNode.innerHTML).toBe("<p>Alter: Target content</p>");
+});
+
+it("defaults to Default View if no $tiddler given", function() {
+	wiki.addTiddlers([
+		{title: "$:/graph/Default", text: "Default content", template: "Template"},
+		{title: "Template", text: "Temp: {{}}"}]);
+	var text = "<$graph.view />\n";
+	var widget = $tw.test.renderGlobal(wiki, text);
+	expect(widget.parentDomNode.innerHTML).toBe("<p>Temp: Default content</p>");
+});
+
+/*** $mode: block and inline ***/
+
+it("does not introduce unneeded DOM elements when used as block", function() {
+	wiki.addTiddlers([
+		{title: "Template", text: "<$text text='TemplateBody'/>\n"}]);
+	var text =  "<div>\n\n<$graph.view $template=Template/>\n\n</div>";
+	var widget = $tw.test.renderGlobal(wiki, text);
+	expect(widget.parentDomNode.innerHTML).toBe("<div>TemplateBody</div>");
+});
+
+it("can render implicitly as block", function() {
+	wiki.addTiddler({title: "Template", text: "*X"});
+	var text = "<$graph.view $template=Template />\n";
+	var widget = $tw.test.renderGlobal(wiki, text);
+	expect(widget.parentDomNode.innerHTML).toBe("<ul><li>X</li></ul>");
+});
+
+it("can render implicitly as inline", function() {
+	wiki.addTiddler({title: "Template", text: "*X"});
+	var text = "<$graph.view $template=Template />";
+	var widget = $tw.test.renderGlobal(wiki, text);
+	expect(widget.parentDomNode.innerHTML).toBe("<p>*X</p>");
+});
+
+it("can render explicitly as block", function() {
+	wiki.addTiddler({title: "Template", text: "*X"});
+	var text = "<$graph.view $template=Template $mode=block/>";
+	var widget = $tw.test.renderGlobal(wiki, text);
+	expect(widget.parentDomNode.innerHTML).toBe("<p><ul><li>X</li></ul></p>");
+});
+
+it("can render explicitly as inline", function() {
+	wiki.addTiddler({title: "Template", text: "*X"});
+	var text = "<$graph.view $template=Template $mode=inline/>\n";
+	var widget = $tw.test.renderGlobal(wiki, text);
+	expect(widget.parentDomNode.innerHTML).toBe("*X");
+});
+
+/*** Parameters and fills ***/
+
+it("can supply parameters to templates", function() {
+	wiki.addTiddlers([
+		{title: "Template", text: "\\parameters (A, B:defaultB, C, D:defaultD)\n<<A>>-<<B>>-<<C>>-<<D>>"}]);
+	var text = "<$graph.view $template=Template A=inputA B=inputB />\n";
+	var widget = $tw.test.renderGlobal(wiki, text);
+	expect(widget.parentDomNode.innerHTML).toBe("<p>inputA-inputB--defaultD</p>");
+});
+
+it("it does not pass along $dollar parameters", function() {
+	wiki.addTiddlers([
+		{title: "Template", text: "\\parameters (arg $template:$temExpect, $tiddler:$tidExpect, $other:othExpect, $ignored:ignExpect)\n<<arg>>-<<$template>>-<<$tiddler>>-<<$other>>-<<$ignored>>-<<$undeclared>>"}]);
+	// Make sure to specify arg at the very end, it makes sure attr values don't misalign after $dollar attrs are removed
+	var text = "<$graph.view $template=Template $other=wrong $undeclared=wrong type=div $type=div $$type=div arg=works/>\n";
+	var widget = $tw.test.renderGlobal(wiki, text);
+	expect(widget.parentDomNode.innerHTML).toBe("<p>works-$temExpect-$tidExpect-othExpect-ignExpect-</p>");
+});
+
+it("can pass along raw fills", function() {
+	wiki.addTiddlers([
+		{title: "Template", text: "B-<$slot $name=ts-raw/>-A"}]);
+	var text = "<$graph.view $template=Template>\n\n<$text text='Content'/>\n";
+	var widget = $tw.test.renderGlobal(wiki, text);
+	expect(widget.parentDomNode.innerHTML).toBe("<p>B-Content-A</p>");
+});
+
+it("can pass along named fills", function() {
+	wiki.addTiddlers([
+		{title: "Template", text: "B-<$slot $name=named/>-A"}]);
+	var text = "<$graph.view $template=Template>\n\n<$fill $name=named>\n\n<$text text='Named'/>\n";
+	var widget = $tw.test.renderGlobal(wiki, text);
+	expect(widget.parentDomNode.innerHTML).toBe("<p>B-Named-A</p>");
+});
+
+});

@@ -1,0 +1,75 @@
+title: Edges.TypedWidget
+tags: Widgets [[Macro Widgets]]
+caption: edges.typed
+
+\procedure categoryList(category)
+\whitespace trim
+<$vars prefix=`$:/config/flibbles/graph/edges/$(category)$/`>
+<table>
+<$list filter="[[$:/plugins/flibbles/graph]plugintiddlers[]prefix<prefix>]">
+<tr>
+<th align=left><$text text={{{ [{!!title}removeprefix<prefix>] }}} /></th>
+<td align=left><$transclude $field=description/></td>
+\end
+
+! Introduction
+
+<<.wid edges.typed>> provides a quick way to introduce for a given tiddler all edges which are configured in the <<.graph>> properties configuration. This includes all edges corresponding to configured fields, and any that would exist from a configured function.
+
+Fields are parsed using their [[Relink settings|Relink]], which can also be configured through the edge settings as well, in case Relink is not installed.
+
+! Contents and Attributes
+
+The content of an <<.wid edges.typed>> widget is an optional template used for ever edge which would be otherwise generated. Without this template, a simple <<.value "<$edge $id=<<id>> />" >> is used. In other words, a simple edge is made.
+
+Within the widget block, <<.wid edges.typed>> defines the tiddler <<.value toTiddler>> for each iterated field list-item.
+
+|!Attribute | !Description |
+|$tiddler |The tiddler whose fields are used to create edges (defaults to "[all[]]") |
+|$functions |Filter to decide which functions to render (if not set, inherits value. See below) |
+|$fields |Filter to decide which fields to render (if not set, inherits value. See below) |
+|$editable |If 'yes', any created field edges will be deletable, which will modify the corresponding fields (defaults to 'no') |
+
+<$doc.implementation />
+
+! Variables
+
+The content of the <<.wid edges.typed>> widget is executed for each edge type. The following availables are available in each iteration of the content.
+
+|!Variables |!Description |
+|`id` |A unique id to be used in the $id attribute of <<.wid edge>> if you wish. |
+|`dataTiddler` |The title of the data tiddler from which the edge type gets its properties. May not exist for custom-added $field edges |
+
+! $fields
+
+The <<.attr $fields>> attributes can specify which configured [[field edges|Fields EdgeType]] should be considered. This is a filter attribute which is passed a list of all configured fields in the TW5-graph settings.
+
+<<categoryList fields>>
+
+By default, the value of this attribute is <<value '[all[]]'>>, which means all configured fields will be used. Here are some example ways this attribute may be useful
+
+; [all[]] -list -tag
+: Use all configured fields except for "list" and "tag"
+; list
+: Generate edges only for the the "list" field
+; [all[]] otherField
+: Uses all configured fields, and also the unconfigured "otherField". (Unconfigured fields are treated as a list field.)
+
+! $functions
+
+The <<.attr $function>> attribute specifies which [[functions|Functions EdgeType]] to use. Otherwise, it works exactly like the <<.attr $fields>> attribute does. By default, <<.graph>> has the following functions defined:
+
+<<categoryList functions>>
+
+By default, the value of this attribute is <<value '[all[]]'>>, which means all configured fields will be used. Refer to <<.attr $field>> above for examples on how to include or exclude functions.
+
+! Inheriting values for $functions and $fields
+
+The attributes <<.attr $functions>> and <<.attr $fields>> will inherit their values from parent widgets, so you should rarely have to actually set a value. This inheritance is done through the variables <<.var functionsFilter>> and <<.var fieldsFilter>>.
+
+If you use <<.wid edges.typed>> inside of <<.wlink Nodes.NeighborsWidget>>, the attributes assume the same values you passed to that widget.
+
+If you use <<.wid edges.typed>> inside of <<.wlink Properties.SettingsWidget>>, the attributes will assume the values set in the associated GraphTiddler's settings.
+
+
+[[Examples|Edges.TypedWidget (Examples)]]

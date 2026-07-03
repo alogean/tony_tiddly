@@ -1,0 +1,76 @@
+title: Graph.ViewWidget
+tags: Widgets [[Macro Widgets]]
+caption: graph.view
+
+! Introduction
+
+The <<.wid graph.view>> widget is a macro-defined widget which provides simple way to render [[graphTiddlers|GraphTiddler]] in contexts other than the [[Sidebar]]. For instance, while you can see a graphTiddler entitled "Foxes" in the Sidebar by selecting <<.value Foxes>> from the "Graph:" dropdown along the Sidebar banner, you could look at the exact same graph in a tiddler with the following wikitext: `<$graph.view $tiddler="$:/graph/Foxes" />`.
+
+!! `$:/graph/` namespace
+
+The reason for the `$:/graph/` namespace is because all graphTiddlers available to the sidebar (and configurable in the <<.graph>> settings) have that prefix, though it's usually hidden. It must be typed into the <<.attr $tiddler>> attribute of this widget is because it's capable to rendering //any// tiddler as a graph, not just Sidebar graphTiddlers.
+
+! Content and Attributes
+
+Any widget contents, including any <<.wid fill>> widgets, are passed along to the template as though the template were transcluded directly.
+
+|!Attribute |!Description |
+|$tiddler |The title of a graphTiddler to render (defaults to `$:/graph/Default` if not specified) |
+|$template |Optional template to override whatever template the graphTiddler would ordinarily use |
+|$engine |Optional graph engine to use rather than whatever is globally configured |
+|$mode |Override the default parsing mode for the given graph to <<.value block>> or <<.value inline>> |
+|//{attributes not starting with $}// |Any other attributes that do not start with a dollar sign are passed to the template as parameters, just as though the template were transcluded directly. |
+
+<$doc.implementation />
+
+! Transclusion
+
+At its heart, this widget effectively acts as a glorified transclusion. While it has other features, this:
+
+<$doc.demo
+	description= "Widget transclusion"
+	code="""<$graph.view $tiddler="$:/graph/Alchemy" $template="$:/plugins/flibbles/graph/templates/standard-graph" />""" />
+
+Is functionally the same as this:
+
+<$doc.demo
+	description= "Wikitext transclusion"
+	code="""{{$:/graph/Alchemy||$:/plugins/flibbles/graph/templates/standard-graph}}""" />
+
+Although obviously this widget provides other attributes and functionality, as well as respecting the <<.field template>> field of the targetted tiddler when no template is specified.
+
+Unlike transclusion, <<.wid graph.view>> uses <<.tid $:/graph/Default>> as its default <<.attr $tiddler>> instead of <<.var currentTiddler>> to avoid a common pitfal. If you are making graphs of the current tiddler //inadvertently//, then you may accidentally blast all of the current tiddler's text content if you move a single node in the render graph. (Because the default editable template will use the current tiddler as a [[DataTiddler|DataTiddlers]] to store node positions).
+
+! `$engine` Attribute
+
+This attribute can be used to override the default graph engine used to render graphs. This does so by configuring the value of the <<.var graphengine>> variable when the template is called.
+
+This will override any <<.field engine>> attribute set on the GraphTiddler, but it will not have an effect if the template explicitly specifies a graph engine rather than relying on the globally defined <<.var graphengine>>.
+
+! Example
+
+<$doc.example
+	description= "Basic usage"
+	narrative= """This shows how to use the widget to render a graphTiddler as-is, but also using a custom template, which isn't actually a graph template. It creates a table!"""
+	content="""<$graph.view $tiddler="MyGraph" />
+
+<$graph.view $tiddler="MyGraph" $template="Table View" />
+""">
+<$data title="MyGraph" text="""{
+    "Denial": "-125,-60",
+    "Anger": "-75,20",
+    "Bargaining": "0,50",
+    "Depression": "75,20",
+    "Acceptance": "125,-60"
+}"""
+type="application/json"
+filter="Denial Anger Bargaining Depression Acceptance" />
+<$data title="Table View" text="""<table>
+  <$list variable="entry" filter="[subfilter{!!filter}]">
+    <tr>
+      <th><$text text=<<entry>> /></th>
+      <td><$text text={{{ [{!!title}getindex<entry>] }}} /></td>
+    </tr>
+  </$list>
+</table>""" />
+</$doc.example>

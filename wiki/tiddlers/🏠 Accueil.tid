@@ -1,0 +1,26 @@
+title: 🏠 Accueil
+
+! 🧠 Bienvenue dans ton second cerveau
+
+Un espace unique qui combine le **[[Zettelkasten]]** (penser en réseau) et la **[[Méthode PARA]]** (piloter tes projets). Commence par lire les [[📐 Conventions]], puis explore le [[🕸 Graphe de la pensée]].
+
+!! ⚡ Créer une note
+
+<$button class="tc-btn-big-green"><$action-sendmessage $message="tm-new-tiddler" tags="[[Note fugace]]"/> ➕ Note fugace</$button> <$button class="tc-btn-big-green"><$action-sendmessage $message="tm-new-tiddler" tags="[[Note littéraire]]"/> ➕ Note littéraire</$button> <$button class="tc-btn-big-green"><$action-sendmessage $message="tm-new-tiddler" tags="[[Note permanente]]"/> ➕ Note permanente</$button>
+
+!! 🗂 PARA
+
+!!! Projets
+<<list-links "[tag[Projet]]">>
+
+!!! Domaines
+<<list-links "[tag[Domaine]]">>
+
+!! 🌱 Dernières notes permanentes
+
+<$list filter="[tag[Note permanente]!sort[title]limit[12]]"><$link/> · </$list>
+
+!! 🧭 Repères
+
+* [[📐 Conventions]] — comment écrire et relier tes notes
+* [[🕸 Graphe de la pensée]] — la carte visuelle de tes idées

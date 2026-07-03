@@ -1,0 +1,38 @@
+{
+	"tiddlers": [
+		{
+			"file": "./Shih_tzu.jpg",
+			"isTiddlerFile": false,
+			"fields": {
+				"title": {
+					"source": "filename"
+				},
+				"artist": "Cameron Fischer",
+				"type": "image/jpeg"
+			}
+		},
+		{
+			"file": "./favicon.png",
+			"isTiddlerFile": false,
+			"fields": {
+				"title": "$:/favicon.ico",
+				"type": "image/png"
+			}
+		}
+	],
+	"directories": [
+		{
+			"path": ".",
+			"filesRegExp": "^.*\\.svg$",
+			"isTiddlerFile": false,
+			"searchSubdirectories": true,
+			"fields": {
+				"title": {
+					"source": "filename"
+				},
+				"type": "image/svg+xml"
+
+			}
+		}
+	]
+}

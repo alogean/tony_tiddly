@@ -1,0 +1,55 @@
+/*\
+
+Widget for creating edges within graphs.
+
+\*/
+
+"use strict";
+
+var nextId = 1;
+
+exports.baseClass = "graphobject";
+exports.name = "edge";
+// These are object properties that will get added to the variable context
+// when action strings are invoked.
+exports.actionContext = ["id", "fromTiddler", "toTiddler"];
+
+exports.constructor = function(parseTreeNode, options) {
+	this.initialise(parseTreeNode, options);
+};
+
+var EdgeWidget = exports.prototype = {};
+
+EdgeWidget.graphObjectType = "edges";
+
+EdgeWidget.execute = function() {
+	this.id = this.getAttribute("$id");
+	if (!this.id) {
+		// We do this instead of using getAttribute's default arg
+		// so we don't increment unecessarily, and maybe reuse
+		// the same auto-id if this edge refreshes Self. This'll give better
+		// results when updating the graph. It's a CHANGED edge, not a new one.
+		this.counter = this.counter || nextId++;
+		this.id = "$:/edge/" + this.counter;
+	}
+	this.fromTiddler = this.getAttribute("$from", this.getVariable("currentTiddler"));
+	this.toTiddler = this.getAttribute("$to", this.getVariable("toTiddler"));
+	this.makeChildWidgets();
+};
+
+EdgeWidget.setCustomProperties = function(properties) {
+	if (this.fromTiddler) {
+		properties.from = this.fromTiddler;
+	}
+	if (this.toTiddler) {
+		properties.to = this.toTiddler;
+	}
+};
+
+EdgeWidget.curate = function(objects) {
+	// Edges are not legal if there aren't corresponding nodes for its
+	// to and from.
+	return !objects.nodes
+	|| !objects.nodes[this.fromTiddler]
+	|| !objects.nodes[this.toTiddler];
+};

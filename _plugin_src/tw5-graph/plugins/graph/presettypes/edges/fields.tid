@@ -1,0 +1,18 @@
+title: $:/plugins/flibbles/graph/presettypes/edges/fields
+
+\procedure typeSelector()
+\whitespace trim
+<$select tiddler=`$:/config/flibbles/relink/fields/$(fieldName)$` default=list>
+  <$list filter="[[$:/plugins/flibbles/relink]is[tiddler]then[relinkfieldtype]else[fieldtype]modules[]moduleproperty[name]]">
+    <option>
+      <$text text={{!!title}} />
+    </option>
+  </$list>
+</$select>
+\end
+
+"Fields" presets define the edge properties for edges corresponding to tiddler fields. These types of edges can be easily added to a node using the <<.link EdgesAllWidget>> widget, or the more inclusive `$edges.typed` widget, which encompasses all other types of preset edge types.
+
+<$vars fieldName={{{ [<currentTiddler>removeprefix[$:/config/flibbles/graph/edges/fields/]] }}}>
+
+Field type: <<typeSelector>>

@@ -1,0 +1,46 @@
+title: $:/editions/tw5-graph/templates/tutorial
+
+\procedure label(variable)<$text text={{{ [<variable>getvariable[]get[caption]split[.]butfirst[]join[.]] }}} />
+\procedure navigation()
+\whitespace trim
+<div class=doc-navigation>
+
+<$linkcatcher actions="<$action-setfield $tiddler=<<tabsState>> text=<<navigateTo>> /><$action-navigate $to=<<currentTiddler>> />" >
+
+<span class=doc-prev>
+
+<%if [all[current]tagging[]before<currentTab>] %>
+<$link to=<<condition>>>
+<$text text="Prev: "/>
+<<label condition>>
+</$link>
+<%endif%>
+</span>
+
+<span class=doc-next>
+
+<%if [all[current]tagging[]after<currentTab>] %>
+<$link to=<<condition>>>
+<$text text="Next: "/>
+<<label condition>>
+\end navigation
+
+\whitespace trim
+
+<$transclude
+	$tiddler="$:/plugins/flibbles/graph/ui/grouped-tabs"
+	tabsList="[tag<currentTiddler>]"
+	default={{{ [tag<currentTiddler>] }}} >
+
+<$fill $name=body>
+
+! <$link to=<<currentTab>> ><<label currentTab>></$link>
+
+<<navigation>>
+
+<$transclude $tiddler=<<currentTab>> />
+
+<<navigation>>
+</$fill>
+
+<$fill $name=button><<label currentTab>></$fill></$transclude>

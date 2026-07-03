@@ -1,0 +1,21 @@
+title: $:/plugins/flibbles/graph/ui/Modals/SelectField
+subtitle: Select field
+first-search-filter: [subfilter{$:/plugins/flibbles/graph/subfilters##edgetypes.fields}search:title{$:/temp/graph/select}sort[title]limit[10]]
+footer: {{$:/plugins/flibbles/graph/ui/Modals/Select!!footer}}
+mask-closable: yes
+
+<p class="tc-edit-field-add">
+
+<em class="tc-edit tc-small-gap-right">
+
+<$text text="Select an existing field, or type in the name for a new one."/>
+
+</em></p>
+
+<$transclude $tiddler="$:/plugins/flibbles/graph/ui/Modals/Select">
+
+<$fill $name=list-item>
+
+<div class="tc-menu-list-item">
+
+<$link overrideClass="tc-tiddlylink" />

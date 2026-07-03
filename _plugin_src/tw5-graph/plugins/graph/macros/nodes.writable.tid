@@ -1,0 +1,37 @@
+\widget $nodes.writable($field, $variable:currentTiddler)
+
+\procedure actionAddnode()
+\whitespace trim
+<$action-modal $tiddler="$:/plugins/flibbles/graph/ui/Modals/SelectTiddler">
+  <% if [<selection>!is[tiddler]] %>
+    <$action-createtiddler $basetitle=<<selection>> />
+  <% endif %>
+  <% if [<$field>!match[]] %>
+    <$action-addtyped $tiddler=<<$tiddler>> $field=<<$field>> $value=<<selection>> />
+  <% endif %>
+  <$transclude $variable=recordPosition title=<<selection>> />
+</$action-modal>
+<$action-sendmessage $message=tm-focus-selector $param="input.graph-select" />
+\end actionAddnode
+
+\whitespace trim
+<$parameters $$tiddler={{!!title}}>
+
+<$properties $for=graph
+	doubleclick=<<actionAddnode>>
+	addNode=<<actionAddnode>>
+	drop="""<$action-addtyped $tiddler=<<$tiddler>> $field=<<$field>> $value=<<dropTiddler>> />"""
+	addEdge="""<$action.addedge/>"""
+/>
+
+<$properties delete="<$action-removetyped $tiddler=<<$tiddler>> $field=<<$field>> $value=<<nodeTiddler>> />">
+
+<$list variable=<<$variable>> filter="[<$tiddler>gettyped<$field>!is[draft]]">
+
+<$slot $name=ts-raw>
+
+<$node.default />
+
+\end
+
+\relink $nodes.writable $field:fieldname $tiddler:title

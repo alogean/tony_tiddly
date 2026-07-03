@@ -1,0 +1,17 @@
+title: $:/plugins/flibbles/graph/ui/PropertyTypes/number
+
+\whitespace trim
+
+<$let
+	increment={{{ [<jsonEntry>jsonget[increment]else[1]] }}}
+	default={{{ [<jsonEntry>jsonget[default]else[0]] }}}
+	min={{{ [<jsonEntry>jsonget[min]else[0]] }}}
+	max={{{ [<jsonEntry>jsonget[max]] ~[<increment>multiply[100]add<min>] }}}
+>
+<$range index=<<property>>
+	min=<<min>>
+	max=<<max>>
+	increment=<<increment>>
+	default=<<default>>
+/>
+<span><$text text={{{ [{!!title}getindex<property>else<default>] }}} />

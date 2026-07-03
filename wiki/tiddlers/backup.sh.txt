@@ -1,0 +1,33 @@
+#!/bin/bash
+# Backup quotidien de la mémoire El Doctor vers GitHub
+# (alogean/el-doctor-memory). Lancé chaque jour à 08:00 par launchd
+# (~/Library/LaunchAgents/com.eldoctor.memory-backup.plist).
+# Versionne aussi CLAUDE.md et GEMINI.md (copiés depuis la racine M17).
+set -euo pipefail
+
+M17="/Users/antoine/Library/Mobile Documents/com~apple~CloudDocs/psycho/M17"
+REPO="$M17/memory"
+LOG="$HOME/Library/Logs/el-doctor-backup.log"
+GIT=/usr/bin/git
+
+{
+  echo "=== $(date '+%Y-%m-%d %H:%M:%S') — backup démarré ==="
+  cd "$REPO"
+
+  # Les fichiers de config vivent à la racine M17 (source de vérité) ;
+  # on les copie dans le repo pour les versionner.
+  cp "$M17/CLAUDE.md" "$REPO/CLAUDE.md"
+  cp "$M17/GEMINI.md" "$REPO/GEMINI.md"
+
+  "$GIT" add -A
+  if "$GIT" diff --cached --quiet; then
+    echo "Aucun changement à committer."
+  else
+    "$GIT" commit -m "Auto-backup memory ($(date '+%Y-%m-%d'))"
+    echo "Commit créé : $("$GIT" log -1 --format='%h %s')"
+  fi
+
+  # Pousse aussi les commits locaux en attente d'un backup précédent
+  "$GIT" push origin main
+  echo "Push OK."
+} >> "$LOG" 2>&1

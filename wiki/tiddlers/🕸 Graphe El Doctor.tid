@@ -1,0 +1,20 @@
+color: #d93025
+tags: [[🩺 El Doctor]]
+title: 🕸 Graphe El Doctor
+
+! 🕸 Graphe El Doctor
+
+Réseau des notes de psychopathologie (liens `[[...]]` entre notes). Couleurs par catégorie.
+
+<$let graphengine="Vis-Network">
+<div style="height:74vh;border:1px solid #ddd;border-radius:10px;overflow:hidden;">
+<$graph>
+<$properties.stack>
+<$list filter="[tag[🩺 El Doctor]!tag[Image]!is[system]]">
+<$node label={{{ [{!!caption}!is[blank]then{!!caption}] ~[{!!title}] }}} color={{!!color}} />
+<$edges.typed $fields="[all[]] -[all[]]" />
+</$list>
+</$properties.stack>
+</$graph>
+</div>
+</$let>

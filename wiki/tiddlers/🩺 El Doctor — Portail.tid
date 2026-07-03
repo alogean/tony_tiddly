@@ -1,0 +1,25 @@
+color: #d93025
+tags: [[🩺 El Doctor]]
+title: 🩺 El Doctor — Portail
+
+! 🩺 El Doctor — Psychopathologie (M17)
+
+Base de révision importée depuis Obsidian. Explore par catégorie ou via le [[🕸 Graphe El Doctor]].
+
+!! 🧠 Diagnostics & méthodologie
+<<list-links "[tag[Diagnostic]sort[title]]">>
+
+!! 🧩 Concepts clés
+<<list-links "[tag[Concept clé]sort[title]]">>
+
+!! ⚠️ Familles de troubles
+<<list-links "[tag[Trouble]sort[title]]">>
+
+!! 🗂 Cas cliniques
+<<list-links "[tag[Cas clinique]sort[title]]">>
+
+!! 🎯 Révisions
+<<list-links "[tag[Révision]sort[title]]">>
+
+!! ⚙️ Méta (config agent)
+<<list-links "[tag[Méta]sort[title]]">>

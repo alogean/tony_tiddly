@@ -20,6 +20,11 @@ Un espace unique qui combine le **[[Zettelkasten]]** (penser en réseau) et la *
 
 <$list filter="[tag[Note permanente]!sort[title]limit[12]]"><$link/> · </$list>
 
+!! 🩺 Bases de connaissances
+
+* [[🩺 El Doctor — Portail]] — psychopathologie / DSM-5 (module M17) · <$count filter="[tag[🩺 El Doctor]!tag[Image]]"/> notes
+* [[🕸 Graphe El Doctor]] — le réseau des notes de psychopathologie
+
 !! 🧭 Repères
 
 * [[📐 Conventions]] — comment écrire et relier tes notes
